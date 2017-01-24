@@ -1,0 +1,8 @@
+	My imaginary database holds information about customers for a shopping website.  Information being held: customer's id,  first name, last name, credit card number, address, email, phone number.  The data is stored using a relational model with a 1-1 relationship between the customer and each piece on information on that customer, except for phone number which is one to many.  The data is meaningless without context, there's no point in data if nobody knows what it represents.  Once given the context for what the data represents it becomes usable information.
+
+	The Hierarchical Model just sets up a simple hierarchy, so that the each piece of data has a single "parent" up until you reach the top of the hierarchy.  The Network Model is the same as the Hierarchical model except the pieces of data can have one or multiple "parents".  The relational model makes is easier to represent different objects being children to the same parent, it's just much easier to express the relationships between different pieces of data using the Relational Model.
+
+ 
+ 
+ 
+
