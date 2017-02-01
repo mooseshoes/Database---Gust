@@ -1,0 +1,9 @@
+2.	A Super Key is a column or set of columns that ensures uniqueness for every row.
+A Candidate Key is a super key that uses lowest possible number of columns to ensure uniqueness.
+A Primary Key is the candidate key that is chosen to identify unique rows.
+
+3.	Data types are classifications for data, an important piece of the context required for the data to become valid information.  Let's say I were to make a game, and I needed to create an NPC table.  The NPC table would have a npid field to act as the primary key.  This would be a character type field and it would not be nullable.  There would also be a name field, which would also be a character type field and would not be nullable as all characters need a name to appear in the game.  There would also be a gold field which would list how much of the ingame currency that npc holds.  This field would be of the type integer and it would be nullable.  The npc would also have a field called mortal (to determine if the NPC can be killed).  This would be a booleon type field and it would be nullable.
+
+4.  a)	The first normal form rule exists so the values in each column are indivisible, so there's only one value of that attribute in the column, and more will have to be put into new rows.
+	b)	You must access rows by content, not row number because rows are prone to change.
+	c)  All rows must be unique so that each row can be called on separately.
