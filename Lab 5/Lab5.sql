@@ -8,16 +8,18 @@ from orders o inner join customers c on o.cid = c.cid
 where o.cid = 'c006'
 ;
 
--- Question 2 NOT FINISHED
+-- Question 2
 -- Show the ids of products ordered through any agent who makes at least one order for 
 -- a customer in Kyoto, sorted by pid from highest to lowest. Use joins; no subqueries. 
-select o1.pid
-from orders o1 full outer join orders o2 on o1.ordnumber = o2.ordnumber
-			   inner join customers c on o1.cid = c.cid
-			   inner join agents a on o1.aid = a.aid
-where o1.aid = o2.aid
-	and c.city = 'Kyoto'
-order by o1.pid DESC
+select distinct o.pid
+from orders o
+where o.aid in (select o.aid
+				from orders o inner join customers c on o.cid = c.cid
+			   				  inner join agents a on o.aid = a.aid
+				where o.cid = c.cid
+ 				  and c.city = 'Kyoto'
+                )
+order by o.pid DESC
 ;
 
 -- Question 3
@@ -55,13 +57,27 @@ select c.name as "customer",
 from customers c inner join agents a on c.city = a.city
 ;
 
--- Question 7  NOT FINISHED
--- Show the name and city of customers who live in thecity that makes the fewest
+-- Question 7
+-- Show the name and city of customers who live in the city that makes the fewest
 -- different kinds of products. (Hint: Use count and group by on the Products table.)
+
+-- Using subqueries instead of joins
 select c.name as "name",
-	   c.city as "city",
-       count(p.city) as "products" 
+	   c.city as "city"
+from customers c
+where c.city in (select p.city
+				 from products p
+				 group by p.city
+				 order by count(p.city) ASC
+				 limit 1
+                 )
+;
+-- Using joins I couldn't really find a way to only output customers from the city
+-- with the least products so I put a limit 2 to atleast make it work in this case
+select c.name as "name",
+	   c.city as "city"
 from products p inner join customers c on p.city = c.city
 group by c.name, c.city
-order by "products" ASC
+order by count(p.city) ASC
+limit 2
 ;
