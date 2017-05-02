@@ -15,7 +15,9 @@ DROP TABLE IF EXISTS Starships;
 DROP TABLE IF EXISTS Starbases;
 DROP TABLE IF EXISTS FederationProperties;
 DROP TABLE IF EXISTS People;
-
+DROP ROLE IF EXISTS Administrator;
+DROP ROLE IF EXISTS Officer;
+DROP ROLE IF EXISTS CrewMember;
 
 -- Make all of the tables
 CREATE TABLE People (
@@ -38,6 +40,7 @@ CREATE TABLE FederationProperties (
   buildDate		integer NOT NULL,
   inService	 	boolean NOT NULL,
   maxCapacity	integer NOT NULL,
+  coordinates	TEXT NOT NULL,
   PRIMARY KEY (fpid)
 );
 
@@ -137,11 +140,11 @@ INSERT INTO People(pid, firstName, lastName, gender, species, birthyear, deathye
           ('p0007', 'someone', 'name', 'f', 'vulcan', 2225, null, true, 'Lieutenant Commander', 'Science Officer'),
           ('p0008', 'Crewmate', 'person', 'f', 'human', 2235, null, false, 'Cadet', 'Button pusher');
 
-INSERT INTO FederationProperties(fpid,fpName,BuildDate,inService,maxCapacity)
-	values('fp01','USS Enterprise',2245,true,2000),
-    	  ('fp02','Another Starship',2225,true,800),
-          ('fp03','Starbase1',2205,true,1500000),
-          ('fp04','Other Starbase',2185,false,950000);
+INSERT INTO FederationProperties(fpid,fpName,BuildDate,inService,maxCapacity,coordinates)
+	values('fp01','USS Enterprise',2245,true,2000,'23.17.46.11'),
+    	  ('fp02','Another Starship',2225,true,800,'43.89.26.05'),
+          ('fp03','Starbase1',2205,true,1500000,'12.56.39.88'),
+          ('fp04','Other Starbase',2185,false,950000,'127.45.182.54');
           
 INSERT INTO Officers(pid,fpid)
 	values('p0001','fp01'),
@@ -186,11 +189,25 @@ as
     from 	crew c 	inner join FederationProperties fp on c.fpid = fp.fpid
     				inner join People p on c.pid = p.pid
    ;    
-    
-select *
-from FPOfficers;
+   
+-- Security
 
-select *
-from FPCrew;
+-- An administrator can alter or even delete data
+create role Administrator;
+grant select, insert, update, delete
+on all tables in schema public
+to Administrator;
 
+-- Officers can add updates to the data, but they cannot delete data
+create role Officer;
+grant select, insert, update
+on all tables in schema public
+to Officer;
 
+-- other (non-officer) crew members can view people and federation
+-- properties, as well as where crew members are stationed
+-- but they cannot view where the officers are stationed
+create role CrewMember;
+grant select
+on People, FederationProperties, Crew, Starships, Starbases
+to CrewMember;
