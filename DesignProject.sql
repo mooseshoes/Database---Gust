@@ -71,6 +71,7 @@ CREATE TABLE Missions (
   description 	TEXT NOT NULL,
   region 		TEXT NOT NULL,
   urgency		integer NOT NULL,
+  ended			boolean NOT NULL,
   PRIMARY KEY (mid)
 );
 
@@ -166,9 +167,9 @@ INSERT INTO CombatEquipment(ceid,ceType,ceName)
     	  ('ce02','w','Phaser'),
           ('ce03','s','Deflector Shield');
 	
-INSERT INTO Missions(mid,fpid,missionType,description,region,urgency)
-	values('m001','fp01','RESC','Rescue survivors of a ship crash landed on an asteroid','Far far away',5),
-    	  ('m002','fp01','RSCH','Study life forms on planet X','Somewhere in space',1);
+INSERT INTO Missions(mid,fpid,missionType,description,region,urgency,ended)
+	values('m001','fp01','RESC','Rescue survivors of a ship crash landed on an asteroid','Far far away',5,false),
+    	  ('m002','fp01','RSCH','Study life forms on planet X','Somewhere in space',1,false);
  
 -- View shows on which ship or starbase each officer is stationed
 CREATE view FPOfficers(fpid,fpName,pid,firstName,lastName,sfRank,occupation)
